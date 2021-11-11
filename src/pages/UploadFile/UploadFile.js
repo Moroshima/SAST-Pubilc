@@ -18,7 +18,9 @@ const { Text } = Typography;
 function UploadFile(props) {
   console.log(props.location.id);
   const [id, setId] = useState("something");
-  const [tagList, setTagList] = useState({});
+  const [tagList, setTagList] = useState([
+    { name: "已选择的文件会在这里显示" },
+  ]);
   let fileArray = [];
   useEffect(() => {
     if (!props.location.id) setId(null);
@@ -29,6 +31,9 @@ function UploadFile(props) {
     console.log(id);
     return <Redirect to="/" />;
   }
+
+  // 复盘：filelist之所以不是array是为了不轻易被修改
+  //
 
   return (
     <Card>
@@ -46,30 +51,57 @@ function UploadFile(props) {
               var files = fileInput.files;
               console.log(files);
 
-              for (let count = 0; count < files.length && count < 3; count++) {
+              // 转写为数组这一步似乎是必不可少的？
+              for (let count = 0; count < files.length; count++) {
                 fileArray[count] = files[count];
               }
-              console.log(fileArray);
+              // 为了动态更新内容，我们除了使用state将array再转为state似乎别无选择
+              setTagList(fileArray);
             }}
-            multiple
+            // multiple
           />
           <Button
             style={{ marginBottom: "18px" }}
-            onClick={() => {
-              var fileInput = document.getElementById("uploadClick");
-              var files = fileInput.files;
-              console.log(files);
-              for (let count = 0; count < files.length && count < 3; count++) {
-                fileArray[count] = files[count];
-              }
-              console.log(fileArray);
-            }}
+            // onClick={() => {
+            //   var fileInput = document.getElementById("uploadClick");
+            //   var files = fileInput.files;
+            //   console.log(files);
+            //   for (let count = 0; count < files.length && count < 3; count++) {
+            //     fileArray[count] = files[count];
+            //   }
+            //   console.log(fileArray);
+            // }}
           >
-            <label htmlFor={"uploadClick"}>选择文件</label>
+            {/* htmlFor的写法不够优雅，点击还是得点击到文字才能弹出选择窗口，但似乎无更优解 */}
+            <label htmlFor={"uploadClick"}>点击选择文件</label>
           </Button>
           <br />
           <Row>
-            <Tag size="large" closable={true}></Tag>
+            {/* <Button
+              onClick={() => {
+                console.log(tagList[0].name);
+                console.log(tagList);
+              }}
+            >
+              11
+            </Button> */}
+            {/* map对对象及对象内的元素的要求极高，在很多情况下for循环还是有其存在的意义的 */}
+            {tagList.map((item, index) => {
+              return (
+                <Tag
+                  style={{ marginRight: "10px" }}
+                  size="large"
+                  closable={false}
+                  onClose={() => {
+                    fileArray.splice(index, 1);
+                    setTagList(fileArray);
+                    console.log(fileArray);
+                  }}
+                >
+                  {item.name}
+                </Tag>
+              );
+            })}
           </Row>
           <Row>
             <Button
@@ -81,9 +113,9 @@ function UploadFile(props) {
                 var files = fileInput.files;
                 console.log(files);
 
-                for (let count = 0; count < files.length; count++) {
-                  if (files[count].size > 110) alert("error");
-                  else {
+                // for (let count = 0; count < files.length; count++) {
+                //   if (files[count].size > 110) alert("error");
+                //   else {
                     let formData = new FormData();
                     formData.append("id", id);
                     formData.append("multipartFile", files[0]);
@@ -106,7 +138,7 @@ function UploadFile(props) {
                     });
                   }
                 }
-              }}
+              // }}
             >
               点击上传
             </Button>

@@ -22,7 +22,7 @@ function App() {
               text="SAST"
               // icon={<IconHome size="large" />}
             />
-            <Nav.Footer>
+            {/* <Nav.Footer>
               <Button
                 theme="borderless"
                 icon={<IconHelpCircle size="large" />}
@@ -31,7 +31,7 @@ function App() {
                   marginRight: "12px",
                 }}
               />
-            </Nav.Footer>
+            </Nav.Footer> */}
           </Nav>
         </div>
       </Header>
@@ -70,7 +70,7 @@ function App() {
           }}
         >
           <span>Copyright © 2021 NJUPT.SAST</span>
-          <span style={{ marginTop: "12px" }}>All Rights Reserved.</span>
+          <span style={{ marginTop: "12px" }}>All Rights Reserved. UI Powered by Semi Design.</span>
         </span>
       </Footer>
     </Layout>
