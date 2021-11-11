@@ -1,5 +1,13 @@
 import React from "react";
-import { Form, Row, Col, TextArea, Button, Card } from "@douyinfe/semi-ui";
+import {
+  Form,
+  Row,
+  Col,
+  TextArea,
+  Button,
+  Card,
+  Toast,
+} from "@douyinfe/semi-ui";
 import axios from "axios";
 import "./FormList.css";
 
@@ -8,22 +16,25 @@ function FormList(props) {
     <Card>
       <Form
         onSubmit={(values) => {
-          props.history.push({
-            pathname: "/upload",
-            id: values.id,
-          });
-          // axios
-          //   .post("/user/add", {
-          //     username: values.username,
-          //     id: values.id,
-          //     study: values.study,
-          //     major: values.major,
-          //     teamName: values.teamName,
-          //   })
-          //   .then((res) => {
-          //     console.log(res);
-          //   });
-          console.log("content:" + JSON.stringify(values));
+          console.log("Content:" + JSON.stringify(values));
+          axios
+            .post("/user/add", {
+              username: values.username,
+              id: values.id,
+              study: values.study,
+              major: values.major,
+              teamName: values.teamName,
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.data.success) {
+                Toast.success({ content: "表单提交成功！", duration: 2 });
+                props.history.push({
+                  pathname: "/upload",
+                  id: values.id,
+                });
+              } else Toast.error({ content: "表单提交失败！", duration: 2 });
+            });
         }}
       >
         {({ formState, values, formApi }) => (
@@ -59,9 +70,6 @@ function FormList(props) {
                 placeholder="请输入队伍名称"
                 rules={[{ required: true, message: "必须填写队伍名称" }]}
               />
-              <Form.Label text="FormState实时映射值："></Form.Label>
-              <TextArea value={JSON.stringify(formState.values)}></TextArea>
-
               <Button
                 type="primary"
                 htmlType="submit"
