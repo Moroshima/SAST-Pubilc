@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Layout, Nav, Button } from "@douyinfe/semi-ui";
 import { IconSemiLogo, IconHelpCircle } from "@douyinfe/semi-icons";
 import FormList from "./pages/FormList/FormList";
-import Upload from "./pages/UploadFile/UploadFile"
+import Upload from "./pages/UploadFile/UploadFile";
 import Finish from "./pages/Finish/Finish";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
             </Nav.Header>
             <Nav.Item
               itemKey="Home"
-              text="SAST"
+              text="NJUPT SAST Commonweal and Innovation Competition File Upload System"
               // icon={<IconHome size="large" />}
             />
             {/* <Nav.Footer>
@@ -70,7 +70,9 @@ function App() {
           }}
         >
           <span>Copyright © 2021 NJUPT.SAST</span>
-          <span style={{ marginTop: "12px" }}>All Rights Reserved. UI Powered by Semi Design.</span>
+          <span style={{ marginTop: "12px" }}>
+            All Rights Reserved. UI Powered by Semi Design.
+          </span>
         </span>
       </Footer>
     </Layout>

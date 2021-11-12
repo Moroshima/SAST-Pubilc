@@ -3,7 +3,6 @@ import {
   Form,
   Row,
   Col,
-  TextArea,
   Button,
   Card,
   Toast,
@@ -28,11 +27,13 @@ function FormList(props) {
             .then((res) => {
               console.log(res);
               if (res.data.success) {
-                Toast.success({ content: "表单提交成功！", duration: 2 });
-                props.history.push({
-                  pathname: "/upload",
-                  id: values.id,
-                });
+                Toast.success({ content: "表单提交成功！", duration: 0.75 });
+                setTimeout(() => {
+                  props.history.push({
+                    pathname: "/upload",
+                    id: values.id,
+                  });
+                }, 750);
               } else Toast.error({ content: "表单提交失败！", duration: 2 });
             });
         }}

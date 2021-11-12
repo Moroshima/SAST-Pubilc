@@ -1,0 +1,23 @@
+#selectFile {
+  height: 32px;
+  font-weight: bold;
+  border-radius: 3px;
+  border-color: transparent;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
+  color: #0077FA;
+  background-color: #F4F5F5;
+  cursor: pointer;
+}
+
+#selectFile:hover {
+  color: #0077FA;
+  background-color: #ECEDED;
+}
+
+#selectFile:active {
+  color: #0077FA;
+  background-color: #E4E4E5;
+}
