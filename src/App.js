@@ -19,7 +19,7 @@ function App() {
             </Nav.Header>
             <Nav.Item
               itemKey="Home"
-              text="NJUPT SAST Commonweal and Innovation Competition File Upload System"
+              text="NJUPT SAST Public and Innovation Competition File Upload System"
             />
             <Nav.Footer>
               {/* eslint-disable-next-line react/jsx-no-target-blank */}
