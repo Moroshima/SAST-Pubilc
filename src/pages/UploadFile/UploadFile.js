@@ -102,7 +102,7 @@ function UploadFile(props) {
                         content: `文件${files[count].name}大小过大，无法上传！`,
                         duration: 4,
                       });
-                      if (count + 1 === files.length) setSpinState(false);
+                      if (count + 2 === files.length) setSpinState(false);
                     } else {
                       axios({
                         method: "post",
@@ -116,7 +116,7 @@ function UploadFile(props) {
                         console.log(res);
                         if (res.data.success) {
                           console.log(res);
-                          if (count + 1 === files.length) setSpinState(false);
+                          if (count + 2 === files.length) setSpinState(false);
                           Toast.success({
                             content: `文件${files[count].name}上传成功！`,
                             duration: 4,
@@ -127,7 +127,7 @@ function UploadFile(props) {
                           console.log(successFileCount);
                         } else {
                           console.log(res);
-                          if (count + 1 === files.length) setSpinState(false);
+                          if (count + 2 === files.length) setSpinState(false);
                           setIsAllSuccess(false);
                           Toast.error({
                             content: `文件${files[count].name}上传失败，请尝试重新上传！`,
