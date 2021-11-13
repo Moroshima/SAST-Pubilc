@@ -10,7 +10,7 @@ import Finish from "./pages/Finish/Finish";
 function App() {
   const { Header, Footer, Content } = Layout;
   return (
-    <Layout style={{ border: "1px solid var(--semi-color-border)" }}>
+    <Layout>
       <Header style={{ backgroundColor: "var(--semi-color-bg-1)" }}>
         <div>
           <Nav mode="horizontal" defaultSelectedKeys={["Home"]}>
@@ -20,18 +20,21 @@ function App() {
             <Nav.Item
               itemKey="Home"
               text="NJUPT SAST Commonweal and Innovation Competition File Upload System"
-              // icon={<IconHome size="large" />}
             />
-            {/* <Nav.Footer>
-              <Button
-                theme="borderless"
-                icon={<IconHelpCircle size="large" />}
-                style={{
-                  color: "var(--semi-color-text-2)",
-                  marginRight: "12px",
-                }}
-              />
-            </Nav.Footer> */}
+            <Nav.Footer>
+              {/* eslint-disable-next-line react/jsx-no-target-blank */}
+              <a href="https://sast.njupt.edu.cn/" target="_blank">
+                <Button
+                  onClick={() => {}}
+                  theme="borderless"
+                  icon={<IconHelpCircle size="large" />}
+                  style={{
+                    color: "var(--semi-color-text-2)",
+                    marginRight: "12px",
+                  }}
+                />
+              </a>
+            </Nav.Footer>
           </Nav>
         </div>
       </Header>
@@ -60,6 +63,11 @@ function App() {
           padding: "20px",
           color: "var(--semi-color-text-2)",
           backgroundColor: "rgba(var(--semi-grey-0), 1)",
+          // 使按钮固定于可视窗口的底部
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
         }}
       >
         <span

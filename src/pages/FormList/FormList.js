@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  Form,
-  Row,
-  Col,
-  Button,
-  Card,
-  Toast,
-} from "@douyinfe/semi-ui";
+import { Form, Row, Col, Button, Card, Toast } from "@douyinfe/semi-ui";
 import axios from "axios";
-import "./FormList.css";
 
 function FormList(props) {
   return (

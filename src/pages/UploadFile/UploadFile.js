@@ -9,6 +9,7 @@ import {
   Banner,
   Tag,
   Spin,
+  Modal,
 } from "@douyinfe/semi-ui";
 import { IconUpload } from "@douyinfe/semi-icons";
 import axios from "axios";
@@ -19,6 +20,9 @@ function UploadFile(props) {
   const [id, setId] = useState("something");
   const [spinState, setSpinState] = useState(false);
   const [tagList, setTagList] = useState();
+  const [modelVisible, setModelVisible] = useState(false);
+  const [selectState, setSelectState] = useState(false);
+  const [isAllSuccess, setIsAllSuccess] = useState(true);
   let fileArray = [];
   useEffect(() => {
     if (!props.location.id) setId(null);
@@ -30,43 +34,21 @@ function UploadFile(props) {
     return <Redirect to="/" />;
   }
 
-  // 复盘：filelist之所以不是array是为了不轻易被修改
-  //
+  // 复盘：Filelist之所以不是Array是为了使被选定的文件列表不轻易被修改
 
   return (
     <Card>
       <Row type="flex" justify="center">
         <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-          {/* <Button
-            style={{ marginBottom: "18px" }}
-            // onClick={() => {
-            //   var fileInput = document.getElementById("uploadClick");
-            //   var files = fileInput.files;
-            //   console.log(files);
-            //   for (let count = 0; count < files.length && count < 3; count++) {
-            //     fileArray[count] = files[count];
-            //   }
-            //   console.log(fileArray);
-            // }}
-          > */}
-          {/* htmlFor的写法不够优雅，点击还是得点击到文字才能弹出选择窗口，但似乎无更优解 */}
-          {/* eslint-disable-next-line no-undef */}
+          {/* htmlFor的写法不够优雅，点击还是得点击到文字才能弹出选择窗口，但似乎无更优解（不过好在通过手写label样式我们最终还是优雅的实现了这样一个功能） */}
           <Banner type="info" description="文件上传大小请勿超过600MiB" />
           <Row style={{ marginBottom: "14px", marginTop: "14px" }}>
             <label htmlFor={"uploadClick"} id="selectFile">
-              点击选择文件
+              {selectState ? "重新选择文件" : "选择上传文件"}
             </label>
           </Row>
           <Row>
-            {/* <Button
-              onClick={() => {
-                console.log(tagList[0].name);
-                console.log(tagList);
-              }}
-            >
-              11
-            </Button> */}
-            {/* map对对象及对象内的元素的要求极高，在很多情况下for循环还是有其存在的意义的 */}
+            {/* map方法对对象及对象内的元素的要求极高，在很多情况下for循环还是有其存在的意义的 */}
             {tagList &&
               tagList.map((item, index) => {
                 return (
@@ -89,25 +71,28 @@ function UploadFile(props) {
           </Row>
           <Row>
             <Button
-              // style={{ marginTop: "12px" }}
+              disabled={spinState}
               icon={<IconUpload />}
               theme="light"
               onClick={() => {
-                setSpinState(true);
+                let successFileCount = 0;
                 var fileInput = document.getElementById("uploadClick");
                 var files = fileInput.files;
                 console.log(files);
-
-                // for (let count = 0; count < files.length; count++) {
-                //   if (files[count].size > 110) alert("error");
-                //   else {
+                if (files.length !== 0) setSpinState(true);
+                else
+                  Toast.info({
+                    content: "请先选择文件再进行上传！",
+                    duration: 2,
+                  });
                 if (files.length > 5) {
                   Toast.error({
-                    content: `上传文件数量上限为5，请重新选择!`,
+                    content:
+                      "上传文件数量上限为5，请重新选择，文件过多可打包上传！",
                     duration: 4,
                   });
                   setSpinState(false);
-                } else
+                } else {
                   for (let count = 0; count < files.length; count++) {
                     let formData = new FormData();
                     formData.append("id", id);
@@ -117,7 +102,7 @@ function UploadFile(props) {
                         content: `文件${files[count].name}大小过大，无法上传！`,
                         duration: 4,
                       });
-                      if ((count+1) === files.length) setSpinState(false);
+                      if (count + 1 === files.length) setSpinState(false);
                     } else {
                       axios({
                         method: "post",
@@ -126,29 +111,36 @@ function UploadFile(props) {
                         headers: {
                           "Content-Type": "multipart/form-data",
                         },
+                        // eslint-disable-next-line no-loop-func
                       }).then(function (res) {
                         console.log(res);
                         if (res.data.success) {
                           console.log(res);
-                          if ((count+1) === files.length)setSpinState(false);
+                          if (count + 1 === files.length) setSpinState(false);
                           Toast.success({
                             content: `文件${files[count].name}上传成功！`,
                             duration: 4,
                           });
+                          successFileCount++;
+                          if (successFileCount === files.length)
+                            setModelVisible(true);
+                          console.log(successFileCount);
                         } else {
                           console.log(res);
-                          if ((count+1) === files.length)setSpinState(false);
+                          if (count + 1 === files.length) setSpinState(false);
+                          setIsAllSuccess(false);
                           Toast.error({
-                            content: `文件${files[count].name}上传失败！`,
+                            content: `文件${files[count].name}上传失败，请尝试重新上传！`,
                             duration: 4,
                           });
                         }
                       });
                     }
                   }
+                }
               }}
             >
-              点击上传
+              {isAllSuccess ? "点击上传" : "部分文件上传失败，点击重新上传"}
             </Button>
           </Row>
           <Row style={{ marginTop: "30px" }}>
@@ -160,6 +152,27 @@ function UploadFile(props) {
           </Row>
         </Col>
       </Row>
+      <Modal
+        title="上传成功"
+        visible={modelVisible}
+        maskClosable={false}
+        closable={false}
+        footer={
+          <Button
+            type="primary"
+            onClick={() => {
+              props.history.push({
+                pathname: "/finish",
+                id: id,
+              });
+            }}
+          >
+            确定
+          </Button>
+        }
+      >
+        恭喜，文件已上传成功！
+      </Modal>
       <input
         id={"uploadClick"}
         type="file"
@@ -167,16 +180,16 @@ function UploadFile(props) {
         style={{ display: "none" }}
         onChange={(event) => {
           console.log(event);
-          // input.addEventListener('change', updateImageDisplay);
           var fileInput = document.getElementById("uploadClick");
           var files = fileInput.files;
           console.log(files);
-
+          if (files.length !== 0) setSelectState(true);
+          else setSelectState(false);
           // 转写为数组这一步似乎是必不可少的？
           for (let count = 0; count < files.length; count++) {
             fileArray[count] = files[count];
           }
-          // 为了动态更新内容，我们除了使用state将array再转为state似乎别无选择
+          // 为了动态更新内容，我们除了使用State将Array转为State似乎别无选择
           setTagList(fileArray);
         }}
         multiple
