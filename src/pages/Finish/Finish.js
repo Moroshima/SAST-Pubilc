@@ -6,12 +6,12 @@ import { IconTickCircle } from "@douyinfe/semi-icons";
 const { Text } = Typography;
 
 function Finish(props) {
-  console.log(props.location.id);
+  // console.log(props.location.id);
   const [id, setId] = useState("something");
   useEffect(() => {
     if (!props.location.id) setId(null);
     else setId(props.location.id);
-    console.log(id);
+    // console.log(id);
   }, [id, props]);
   if (id === null) {
     console.log(id);

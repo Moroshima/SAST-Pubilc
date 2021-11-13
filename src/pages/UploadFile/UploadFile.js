@@ -16,7 +16,7 @@ import axios from "axios";
 import "./UploadFIle.css";
 
 function UploadFile(props) {
-  console.log(props.location.id);
+  // console.log(props.location.id);
   const [id, setId] = useState("something");
   const [spinState, setSpinState] = useState(false);
   const [tagList, setTagList] = useState();
@@ -27,7 +27,7 @@ function UploadFile(props) {
   useEffect(() => {
     if (!props.location.id) setId(null);
     else setId(props.location.id);
-    console.log(id);
+    // console.log(id);
   }, [id, props]);
   if (id === null) {
     console.log(id);
@@ -75,6 +75,7 @@ function UploadFile(props) {
               icon={<IconUpload />}
               theme="light"
               onClick={() => {
+                let uploadCount = 0;
                 let successFileCount = 0;
                 var fileInput = document.getElementById("uploadClick");
                 var files = fileInput.files;
@@ -102,7 +103,9 @@ function UploadFile(props) {
                         content: `文件${files[count].name}大小过大，无法上传！`,
                         duration: 4,
                       });
-                      if (count + 2 === files.length) setSpinState(false);
+                      uploadCount++;
+                      console.log(uploadCount);
+                      if (uploadCount === files.length) setSpinState(false);
                     } else {
                       axios({
                         method: "post",
@@ -115,24 +118,28 @@ function UploadFile(props) {
                       }).then(function (res) {
                         console.log(res);
                         if (res.data.success) {
-                          console.log(res);
-                          if (count + 2 === files.length) setSpinState(false);
+                          // console.log(res);
                           Toast.success({
                             content: `文件${files[count].name}上传成功！`,
                             duration: 4,
                           });
+                          uploadCount++;
+                          console.log(uploadCount);
+                          if (uploadCount === files.length) setSpinState(false);
                           successFileCount++;
                           if (successFileCount === files.length)
                             setModelVisible(true);
-                          console.log(successFileCount);
+                          // console.log(successFileCount);
                         } else {
                           console.log(res);
-                          if (count + 2 === files.length) setSpinState(false);
                           setIsAllSuccess(false);
                           Toast.error({
                             content: `文件${files[count].name}上传失败，请尝试重新上传！`,
                             duration: 4,
                           });
+                          uploadCount++;
+                          console.log(uploadCount);
+                          if (uploadCount === files.length) setSpinState(false);
                         }
                       });
                     }
@@ -171,7 +178,7 @@ function UploadFile(props) {
           </Button>
         }
       >
-        恭喜，文件已上传成功！
+        恭喜，所有文件均已上传成功！
       </Modal>
       <input
         id={"uploadClick"}
