@@ -42,6 +42,7 @@ function App() {
         style={{
           padding: "24px",
           backgroundColor: "var(--semi-color-bg-0)",
+          marginBottom: "100px",
         }}
       >
         <Router>
